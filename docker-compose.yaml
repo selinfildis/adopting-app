@@ -1,0 +1,28 @@
+version: "3"
+services: 
+    postgres:
+        container_name: adoptme-psql
+        image: postgres
+        ports: 
+            - 5432:5432
+        environment: 
+            - POSTGRES_HOST_AUTH_METHOD=trust
+            - PGDATA='/var/lib/postgresql/data/pgdata'
+            - POSTGRES_USER=api
+            - POSTGRES_PASSWORD=devpass # different in prod
+            - POSTGRES_DB=api
+        volumes: 
+            - ${PWD}/docker-volumes/db:/var/lib/postgresql/data # different in prod
+    fastapi:
+        image: tiangolo/uvicorn-gunicorn-fastapi:python3.7
+        container_name: fastapi
+        environment: 
+            - PRE_START_PATH=/app/pre-start.sh
+            - GUNICORN_CMD_ARGS="--reload"
+            - DB_CONN=postgresql://api:devpass@adoptme-psql:5432/api
+        volumes: 
+            - ${PWD}/api:/app # different in prod
+        ports: 
+            - 80:80
+        depends_on:
+            - postgres

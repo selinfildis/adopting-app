@@ -1,0 +1,4 @@
+__pycache__/*
+docker-volumes/*
+.idea/*
+.DS_Store
