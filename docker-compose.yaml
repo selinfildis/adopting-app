@@ -21,7 +21,7 @@ services:
             - GUNICORN_CMD_ARGS="--reload"
             - DB_CONN=postgresql://api:devpass@adoptme-psql:5432/api
         volumes: 
-            - ${PWD}/api:/app # different in prod
+            - ${PWD}:/app # different in prod
         ports: 
             - 80:80
         depends_on:

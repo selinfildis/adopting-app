@@ -5,13 +5,14 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from starlette.responses import RedirectResponse
-from database import get_db
-import models, schemas
-from database import SessionLocal, engine
+from ..database import get_db
+from ..models import user as models
+from ..schemas import user as schemas
 
 from fastapi import APIRouter
 
 router = APIRouter()
+
 
 @router.get("/users/", response_model=List[schemas.User])
 def get_users(db: Session = Depends(get_db)):

@@ -1,6 +1,7 @@
 from datetime import datetime, date
 from pydantic import BaseModel, ValidationError, validator, EmailStr
 
+
 class BaseUser(BaseModel):
     full_name: str
     created_at: datetime
@@ -14,7 +15,6 @@ class BaseUser(BaseModel):
 
     class Config:
         orm_mode = True
-    
 
     @validator('full_name', pre=True)
     def validate_full_name(cls, v):
