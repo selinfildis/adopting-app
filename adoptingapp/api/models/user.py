@@ -1,7 +1,6 @@
 import datetime
 
 from sqlalchemy import Column, Boolean, Float, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
 from sqlalchemy.types import DateTime
 
 from adoptingapp.api.database import Base
@@ -11,20 +10,18 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    full_name = Column(String, unique=True)
+    full_name = Column(String)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
     date_of_birth = Column(DateTime)
-    phone_number = Column(String)
-    email_address = Column(String)
-    address = relationship("Address", back_populates="user")
-    work = relationship("Work", back_populates="user")
+    phone_number = Column(String, unique=True)
+    email_address = Column(String, unique=True)
 
 
 class Address(Base):
     __tablename__ = 'addresses'
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user = relationship("User", back_populates="user")
+    user_id = Column(Integer, ForeignKey('users.id'))
     address_line_1 = Column(String)
     address_line_2 = Column(String)
     postcode = Column(String)
@@ -37,7 +34,7 @@ class Work(Base):
     __tablename__ = 'work'
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user = relationship("User", back_populates="user")
+    user_id = Column(Integer, ForeignKey('users.id'))
     working_hours_start = Column(String)  # enforce time on schema
     working_hours_end = Column(String)  # enforce time on schema
     working_days = Column(String)  # determine enforcement
@@ -50,7 +47,7 @@ class Form(Base):
     __tablename__ = 'forms'
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user = relationship("User", back_populates="user")
+    user_id = Column(Integer, ForeignKey('users.id'))
     created = Column(DateTime, nullable=False)
     animal_type = Column(String)
     meeting_point_preferred = Column(Boolean, nullable=False)
